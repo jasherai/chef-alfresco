@@ -29,16 +29,6 @@ archive_zip = "#{cache_path}/#{zip_file}"
 
 root_dir = node['alfresco']['root_dir']
 
-alfresco_user   = node['tomcat']['user']
-alfresco_group  = node['tomcat']['group']
-
-webapp_dir      = node['tomcat']['webapp_dir']
-temp_dir        = node['tomcat']['tmp_dir']
-tomcat_dir      = node['tomcat']['home']
-tomcat_base_dir = node['tomcat']['base']
-tomcat_work_dir = node['tomcat']['work_dir']
-
-
 ### Include Recipe Dependencies
 
 include_recipe "java"
@@ -49,6 +39,15 @@ include_recipe "imagemagick"
 include_recipe "swftools"
 include_recipe "tomcat"
 
+alfresco_user   = node['tomcat']['user']
+alfresco_group  = node['tomcat']['group']
+tomcat_user     = node['tomcat']['user']
+tomcat_group    = node['tomcat']['group']
+webapp_dir      = node['tomcat']['webapp_dir']
+temp_dir        = node['tomcat']['tmp_dir']
+tomcat_dir      = node['tomcat']['home']
+tomcat_base_dir = node['tomcat']['base']
+tomcat_work_dir = node['tomcat']['work_dir']
 
 ### Install Package Dependencies
 
@@ -179,8 +178,8 @@ end
 
 %w{alfresco.war share.war}.each do |war|
   execute "Deploy #{war}" do
-    user      "tomcat6"
-    group     "tomcat6"
+    user      tomcat_user
+    group     tomcat_group
     command   <<-COMMAND.gsub(/^ {4}/, '')
 
       unzip -j #{archive_zip} web-server/webapps/#{war} -d #{temp_dir} && \\
