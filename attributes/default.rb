@@ -40,6 +40,18 @@ node.set['tomcat']['java_options'] = node['alfresco']['java_opts']
 
 node.set['tomcat']['restart_timing'] = "immediately"
 
+### OpenOffice/LibreOffice settings
+
+case platform
+  when "ubuntu"
+    if node['platform_version'].to_f <= 10.04
+      node.set['alfresco']['ooo']['name'] = "openoffice"
+    else
+      node.set['alfresco']['ooo']['name'] = "libreoffice" # OpenOffice changed to LibreOffice in Ubuntu > 10.04
+    end
+  else
+    node.set['alfresco']['ooo']['name'] = ""
+end
 
 ### Database Settings
 
@@ -54,11 +66,11 @@ default['alfresco']['root_dir'] = "/srv/alfresco/alf_data"
 default['alfresco']['img']['root'] = "/usr"
 default['alfresco']['swf']['exe']  = "/usr/bin/pdf2swf"
 
-default['alfresco']['ooo']['exe']      = "/usr/lib/openoffice/program/soffice"
+default['alfresco']['ooo']['exe']      = "/usr/lib/#{node['alfresco']['ooo']['name']}/program/soffice"
 default['alfresco']['ooo']['enabled']  = "true"
 
 default['alfresco']['jodconverter']['enabled']       = "true"
-default['alfresco']['jodconverter']['office_home']   = "/usr/lib/openoffice"
+default['alfresco']['jodconverter']['office_home']   = "/usr/lib/#{node['alfresco']['ooo']['name']}"
 default['alfresco']['jodconverter']['port_numbers']  = "8100"
 
 
