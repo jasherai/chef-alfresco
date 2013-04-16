@@ -1,3 +1,15 @@
+.vagrant
+Berksfile.lock
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+/cookbooks
+
+# Bundler
 Gemfile.lock
-tmp/
-/.project
+bin/*
+.bundle/*
+

@@ -1,11 +1,15 @@
 ###############################
 ## Common Alfresco Properties #
 ###############################
+#
+# Customised for NFRN Alfresco
+#
 
 #
 # Sample custom content and index data location
 #
 dir.root=<%= node[:alfresco][:root_dir] %>
+<%= render 'remote_contentstore.txt.erb', :variables => @partials['remote_contentstore'] %>
 
 #
 # Sample database connection properties

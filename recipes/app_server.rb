@@ -65,6 +65,8 @@ directory root_dir do
   recursive   true
 end
 
+### mount Alfresco Data Directory from file_server if enabled
+#if node['']
 
 ### Download Alfresco Zip
 
@@ -140,6 +142,13 @@ template "#{tomcat_base_dir}/shared/classes/alfresco-global.properties" do
   group     alfresco_group
   mode      "0640"
 
+  variables :partials => {
+    'remote_contentstore' => {
+      'base'    => "#{node['alfresco']['file_server']['mount']['point']}/alf_data/contentstore",
+      'deleted' => "#{node['alfresco']['file_server']['mount']['point']}/alf_data/contentstore.deleted",
+      'audit'   => "#{node['alfresco']['file_server']['mount']['point']}/alf_data/audit.contentstore"
+    }
+  }
   notifies  :restart, "service[tomcat]", :immediately
 end
 
