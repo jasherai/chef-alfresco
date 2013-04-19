@@ -121,6 +121,17 @@ execute "Extract shared files to #{tomcat_base_dir}/shared/classes/alfresco" do
   creates   "#{tomcat_base_dir}/shared/classes/alfresco"
 end
 
+execute "Extract Licenses to #{tomcat_base_dir}/licenses" do
+  user      "root"
+  group     "root"
+  command   <<-COMMAND.gsub(/^ {2}/, '')
+
+    unzip -jo #{archive_zip} licenses -d #{tomcat_dir}/
+  COMMAND
+
+  creates   "#{tomcat_base_dir}/shared/classes/alfresco"
+end
+
 execute "Extract jar files to #{tomcat_dir}/lib" do
   user      "root"
   group     "root"
@@ -142,13 +153,6 @@ template "#{tomcat_base_dir}/shared/classes/alfresco-global.properties" do
   group     alfresco_group
   mode      "0640"
 
-  variables :partials => {
-    'remote_contentstore' => {
-      'base'    => "#{node['alfresco']['file_server']['mount']['point']}/alf_data/contentstore",
-      'deleted' => "#{node['alfresco']['file_server']['mount']['point']}/alf_data/contentstore.deleted",
-      'audit'   => "#{node['alfresco']['file_server']['mount']['point']}/alf_data/audit.contentstore"
-    }
-  }
   notifies  :restart, "service[tomcat]", :immediately
 end
 
