@@ -132,6 +132,19 @@ execute "Extract Licenses to #{tomcat_base_dir}/licenses" do
   creates   "#{tomcat_base_dir}/shared/classes/alfresco"
 end
 
+execute "Extract keystore to #{root_dir}/keystore" do
+  user      "root"
+  group     "root"
+  command   <<-COMMAND.gsub(/^ {2}/, '')
+
+    unzip -jo #{archive_zip} web-server/webapps/alfresco.war && \\
+    mkdir #{root_dir}/keystore && chown #{tomcat_user}:#{tomcat_group} #{root_dir}/keystore && \\
+    unzip -jo alfresco.war WEB-INF/classes/alfresco/keystor* -d #{root_dir}/keystore
+  COMMAND
+
+  creates   "#{tomcat_base_dir}/shared/classes/alfresco"
+end
+
 execute "Extract jar files to #{tomcat_dir}/lib" do
   user      "root"
   group     "root"
